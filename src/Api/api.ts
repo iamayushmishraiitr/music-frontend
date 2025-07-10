@@ -7,7 +7,7 @@ export const apis = {
   GET_STREAM:`${baseUrl}/stream/getStreams`,
   GET_CURRENT_STREAM:`${baseUrl}/stream/getCurrentStream`,
   PlAY_NEXT :`${baseUrl}/stream/playNext`,
-  UP_VOTES:`${baseUrl}/stream/upVote`,
+  UP_VOTE:`${baseUrl}/stream/upVote`,
   DOWN_VOTES:`${baseUrl}/stream/downVote`,
   GET_SPACES:`${baseUrl}/space/getSpaces`,
   CREATE_SPACES:`${baseUrl}/space/createSpace`,

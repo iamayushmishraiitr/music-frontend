@@ -1,27 +1,74 @@
-import React, { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { Music, ArrowLeft, Plus, Vote } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate} from "react-router-dom";
+import {  ArrowLeft,  Vote} from "lucide-react";
 import "../styles/Space.css";
 import toast from "react-hot-toast";
+import VideoInput from "../component/videoInput";
+import { request } from "../Api/reqHandler";
+import { apis } from "../Api/api";
+import StreamStats from "../component/StreamStats";
+import VideoPlayer from "../component/videoPlayer";
 
+interface  upVotes {
+   id : number ,
+   userId : number ,
+   streamId : number
+}
 interface QueueItem {
   id: number;
-  title: string;
-  url: string;
-  addedBy: string;
-  votes: number;
+  active:boolean ;
+  url :string
+  bigImage:string
+  smallImage:string
+  userId:number
+  extractedId : string
+  upvotes:  upVotes[]
 }
 
 const Space: React.FC = () => {
-  const { spaceId } = useParams<{ spaceId: string }>();
+  const {  id  } = useParams<{ id: string }>();
   const navigate = useNavigate();
-
   const [queue, setQueue] = useState<QueueItem[]>([]);
+  const [reFetchQueue,setRefetchQueue] =useState(true) 
+  const [reFetchCurrentStream,setReFetchCurrentStream] =useState(true) 
   const [youtubeUrl, setYoutubeUrl] = useState("");
-  const [isPlaying, setIsPlaying] = useState(false);
   const [currentVideo, setCurrentVideo] = useState<QueueItem | null>(null);
+  const  [hostId ,setHostId] = useState("") 
+  useEffect(() => {
+    const fetchStreams = async () => {
+      try {
+        const res:any = await request.get(apis.GET_STREAM, {
+          params: {
+            spaceId: id,
+          },
+        });
+        const data = res?.data?.data as QueueItem[];
+        setHostId(res?.data?.hostId)
+        setQueue(data); 
+      } catch (error) {
+        console.error("Error fetching streams:", error);
+      }
+    };
+    fetchStreams();
+  }, [id,reFetchQueue]);
 
-  const handleCopyButton = () => {
+  useEffect(() => {
+    const fetchCurrentStreams = async () => {
+      try {
+        const res:any = await request.get(apis.GET_CURRENT_STREAM, {
+          params: {
+            spaceId: id,
+          },
+        }) 
+        setCurrentVideo(res?.data?.data)
+      } catch (error) {
+        console.error("Error fetching streams:", error);
+      }
+    };
+    fetchCurrentStreams();
+  }, [id,reFetchCurrentStream]);
+
+  const handleShareButton = () => {
     const currentURL = window.location.href;
     navigator.clipboard
       .writeText(currentURL)
@@ -32,31 +79,34 @@ const Space: React.FC = () => {
         console.error("Failed to copy: ", err);
       });
   };
-  const handleAddToQueue = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (youtubeUrl.trim()) {
-      const newItem: QueueItem = {
-        id: queue.length + 1,
-        title: `Video ${queue.length + 1}`,
-        url: youtubeUrl.trim(),
-        addedBy: "Anonymous",
-        votes: 0,
-      };
-      setQueue([...queue, newItem]);
-      setYoutubeUrl("");
+  const handleAddToQueue = async(e: React.FormEvent) => {
+      try {
+          await request.post(apis.POST_STREAM,{
+           userId : localStorage.getItem("userId") ,
+           url :youtubeUrl ,
+           spaceId : id
+        })
+        setRefetchQueue((prev)=> !prev) 
+        toast.success("stream added to queue")
+      } catch (error) {
+        toast.error("Something went wrong")
+        console.log(error)
+      }
+  };
+  const handlePlayNext = async()=>{
+     
+     if(hostId != localStorage.getItem("userId")){
+      toast.error("Only host can change current stream")
+      return 
     }
-  };
+     await request.post(apis.PlAY_NEXT,{
+        userId : Number(localStorage.getItem("userId")),
+        spaceId  : Number(id) 
+     })
+     setReFetchCurrentStream((prev)=>!prev)
+     setRefetchQueue((prev)=> !prev) 
 
-  const handleVote = (itemId: number) => {
-    setQueue(
-      queue
-        .map((item) =>
-          item.id === itemId ? { ...item, votes: item.votes + 1 } : item
-        )
-        .sort((a, b) => b.votes - a.votes)
-    );
-  };
-
+  }
   const handleGoBack = () => {
     navigate("/dashboard");
   };
@@ -68,63 +118,30 @@ const Space: React.FC = () => {
           <ArrowLeft size={20} />
         </button>
         <div className="space-title">
-          <button className="copy-button" onClick={handleCopyButton}>
+          <button className="copy-button" onClick={handleShareButton}>
             Share
           </button>
         </div>
       </div>
-
-      <div className="space-subtitle">
-        <p>Vote for the next song to play on the stream!</p>
-      </div>
-
       <div className="space-main">
         <div className="space-content">
           <div className="video-section">
-            <div className="video-player">
-              {currentVideo ? (
-                <div className="video-playing">
-                  <h3>Now Playing: {currentVideo.title}</h3>
-                  <div className="video-placeholder">
-                    <Music size={48} />
-                    <p>Video Player</p>
-                  </div>
-                </div>
-              ) : (
-                <div className="no-video">
-                  <Music size={48} />
-                  <h3>No video playing</h3>
-                  <p>Add a video to the queue to get started!</p>
-                </div>
-              )}
-            </div>
-
-            <div className="add-video-section">
-              <h3>
-                <Plus size={20} />
-                Add a Video to Queue
-              </h3>
-              <form onSubmit={handleAddToQueue} className="add-video-form">
-                <input
-                  type="url"
-                  value={youtubeUrl}
-                  onChange={(e) => setYoutubeUrl(e.target.value)}
-                  placeholder="Paste YouTube URL here..."
-                  required
-                />
-                <button type="submit" className="add-to-queue-btn">
-                  Add to Queue
-                </button>
-              </form>
-            </div>
+         <VideoPlayer currentVideo ={currentVideo} onVideoEnd= {handlePlayNext} />
+         <VideoInput 
+           youtubeUrl={youtubeUrl}
+           setYoutubeUrl= {setYoutubeUrl}
+           handleAddToQueue={handleAddToQueue}
+         />
           </div>
-
           <div className="queue-section">
             <div className="queue-header">
-              <Vote size={20} />
-              <h3>Vote Queue ({queue.length})</h3>
-            </div>
-            <div className="queue-content">
+              <Vote size={27} />
+              <h3>Vote Queue </h3>
+              <button className="play-next-btn" onClick={()=>handlePlayNext()}>
+              Play Next
+             </button>
+             </div>
+             <div className="queue-content">
               {queue.length === 0 ? (
                 <div className="empty-queue">
                   <h4>Queue is empty</h4>
@@ -132,20 +149,22 @@ const Space: React.FC = () => {
                 </div>
               ) : (
                 <div className="queue-list">
-                  {queue.map((item) => (
-                    <div key={item.id} className="queue-item">
-                      <div className="queue-item-info">
-                        <h4>{item.title}</h4>
-                        <p>Added by {item.addedBy}</p>
+                  {queue.map((video,index) => (
+                      <div key={video.id} className="queue-item">
+                      <div className="queue-position">#{index + 1}</div>
+                      <div className="video-thumbnail">
+                        <img 
+                          src={video.smallImage}
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.src = `https://img.youtube.com/vi/${video.id}/hqdefault.jpg`;
+                          }}
+                        />
                       </div>
-                      <div className="queue-item-actions">
-                        <span className="votes">{item.votes} votes</span>
-                        <button
-                          onClick={() => handleVote(item.id)}
-                          className="vote-btn"
-                        >
-                          Vote
-                        </button>
+                      <div className="video-info">
+                       <StreamStats videoId={video?.id}  upVotes = {video?.upvotes} />
+                      </div>
+                      <div className="vote-controls">
                       </div>
                     </div>
                   ))}
