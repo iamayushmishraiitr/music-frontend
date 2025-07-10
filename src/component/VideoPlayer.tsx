@@ -22,7 +22,7 @@ interface VideoPlayerProps {
   onVideoEnd: () => void;
 }
 
-const VideoPlayer: React.FC<VideoPlayerProps> = ({ currentVideo, onVideoEnd }) => {
+const VideoPlayer: React.FC<VideoPlayerProps> = ({ currentVideo }) => {
   if (!currentVideo) {
     return (
       <div className="video-player-container">

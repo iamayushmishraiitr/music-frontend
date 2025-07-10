@@ -3,7 +3,7 @@ import { Heart } from "lucide-react"
 import { apis } from "../Api/api";
 import { request } from "../Api/reqHandler";
 import { useState } from "react";
-import { FilledHeart } from "./filledHeart";
+import { FilledHeart } from "./FilledHeart";
 
 interface  upVotes {
     id : number ,
