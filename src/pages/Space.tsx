@@ -3,11 +3,11 @@ import { useParams, useNavigate} from "react-router-dom";
 import {  ArrowLeft,  Vote} from "lucide-react";
 import "../styles/Space.css";
 import toast from "react-hot-toast";
-import VideoInput from "../component/videoInput";
+import VideoInput from "../component/VideoInput";
 import { request } from "../Api/reqHandler";
 import { apis } from "../Api/api";
 import StreamStats from "../component/StreamStats";
-import VideoPlayer from "../component/videoPlayer";
+import VideoPlayer from "../component/VideoPlayer";
 
 interface  upVotes {
    id : number ,
@@ -79,7 +79,7 @@ const Space: React.FC = () => {
         console.error("Failed to copy: ", err);
       });
   };
-  const handleAddToQueue = async(e: React.FormEvent) => {
+  const handleAddToQueue = async() => {
       try {
           await request.post(apis.POST_STREAM,{
            userId : localStorage.getItem("userId") ,
