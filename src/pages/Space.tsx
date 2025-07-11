@@ -18,8 +18,6 @@ interface QueueItem {
   id: number;
   active:boolean ;
   url :string
-  bigImage:string
-  smallImage:string
   userId:number
   extractedId : string
   upvotes:  upVotes[]
@@ -81,6 +79,7 @@ const Space: React.FC = () => {
       });
   };
   const handleAddToQueue = async() => {
+   
       try {
           await request.post(apis.POST_STREAM,{
            userId : localStorage.getItem("userId") ,
@@ -158,7 +157,7 @@ const Space: React.FC = () => {
                       <div className="queue-position">#{index + 1}</div>
                       <div className="video-thumbnail">
                         <img 
-                          src={video.smallImage}
+                          src= {`https://img.youtube.com/vi/${video.extractedId}/maxresdefault.jpg`}
                           onError={(e) => {
                             const target = e.target as HTMLImageElement;
                             target.src = `https://img.youtube.com/vi/${video.id}/hqdefault.jpg`;

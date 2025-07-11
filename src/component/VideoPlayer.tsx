@@ -10,8 +10,6 @@ interface Video {
     id: number;
     active:boolean ;
     url :string
-    bigImage:string
-    smallImage:string
     userId:number
     upvotes:  upVotes[] 
     extractedId : string
