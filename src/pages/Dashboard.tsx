@@ -59,7 +59,6 @@ const Dashboard = () => {
             userId: localStorage.getItem("userId"),
           },
         });
-        console.log( res?.data)
         setSpaces(res?.data?.data);
       } catch (error) {
         console.error("Error fetching spaces:", error);

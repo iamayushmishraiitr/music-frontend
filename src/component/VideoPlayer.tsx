@@ -33,7 +33,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ currentVideo }) => {
       </div>
     );
   }
-
   return (
     <div className="video-player-container">
       <div className="current-video-info" style={{}}>

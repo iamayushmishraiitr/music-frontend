@@ -1,14 +1,14 @@
 import { Plus } from "lucide-react";
-import { useState } from "react"
 import "../styles/Space.css";
 interface VideoInputProps {
-    youtubeUrl: string;
-    setYoutubeUrl: (url: string) => void;
-    handleAddToQueue: (e: React.FormEvent) => void
+    youtubeUrl: string|undefined;
+    extractedId : string|null
+    setExtractedId:(url:string|null) =>void
+    setYoutubeUrl: (url: string|undefined) => void;
+    handleAddToQueue: (previewVideo :string|null) => void
   }
   
-const VideoInput: React.FC<VideoInputProps> = ({youtubeUrl , handleAddToQueue ,setYoutubeUrl} ) => {
-    const [previewVideo, setPreviewVideo] = useState<string | null>(null);
+const VideoInput: React.FC<VideoInputProps> = ({youtubeUrl ,extractedId ,setExtractedId , handleAddToQueue ,setYoutubeUrl} ) => {
     const extractVideoId = (url: string): string | null => {
         const regex = /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/;
         const match = url.match(regex);
@@ -19,12 +19,12 @@ const VideoInput: React.FC<VideoInputProps> = ({youtubeUrl , handleAddToQueue ,s
         const url = e.target.value;
         setYoutubeUrl(url);
         const videoId = extractVideoId(url);
-        setPreviewVideo(videoId);
+        setExtractedId(videoId);
       };
       const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        handleAddToQueue(e);
-        setTimeout(()=>setPreviewVideo(null),1000)
+        handleAddToQueue(extractedId );
+        setTimeout(()=> setExtractedId(null),1000)
       };
   return (
     <div className="add-video-section">
@@ -44,16 +44,16 @@ const VideoInput: React.FC<VideoInputProps> = ({youtubeUrl , handleAddToQueue ,s
         Add to Queue
       </button>
     </form>
-    {previewVideo && (
+    {extractedId && (
         <div className="video-preview">
           <h4>Preview:</h4>
           <div className="preview-thumbnail">
             <img 
-              src={`https://img.youtube.com/vi/${previewVideo}/maxresdefault.jpg`}
+              src={`https://img.youtube.com/vi/${extractedId}/maxresdefault.jpg`}
               alt="Video thumbnail"
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
-                target.src = `https://img.youtube.com/vi/${previewVideo}/hqdefault.jpg`;
+                target.src = `https://img.youtube.com/vi/${extractedId}/hqdefault.jpg`;
               }}
             />
             <div className="preview-overlay">

@@ -31,8 +31,9 @@ const Space: React.FC = () => {
   const [queue, setQueue] = useState<QueueItem[]>([]);
   const [reFetchQueue,setRefetchQueue] =useState(true) 
   const [reFetchCurrentStream,setReFetchCurrentStream] =useState(true) 
-  const [youtubeUrl, setYoutubeUrl] = useState("");
+  const [youtubeUrl, setYoutubeUrl] = useState<string|undefined>("");
   const [currentVideo, setCurrentVideo] = useState<QueueItem | null>(null);
+  const [extractedId,setExtractedId] = useState<string|null>(null) 
   const  [hostId ,setHostId] = useState("") 
   useEffect(() => {
     const fetchStreams = async () => {
@@ -84,6 +85,7 @@ const Space: React.FC = () => {
           await request.post(apis.POST_STREAM,{
            userId : localStorage.getItem("userId") ,
            url :youtubeUrl ,
+           extractedId:extractedId ,
            spaceId : id
         })
         setRefetchQueue((prev)=> !prev) 
@@ -129,7 +131,9 @@ const Space: React.FC = () => {
          <VideoPlayer currentVideo ={currentVideo} onVideoEnd= {handlePlayNext} />
          <VideoInput 
            youtubeUrl={youtubeUrl}
+           extractedId ={extractedId} 
            setYoutubeUrl= {setYoutubeUrl}
+           setExtractedId= {setExtractedId}
            handleAddToQueue={handleAddToQueue}
          />
           </div>
