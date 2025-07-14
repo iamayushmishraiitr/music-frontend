@@ -17,7 +17,6 @@ interface Video {
 
 interface VideoPlayerProps {
   currentVideo: Video | null;
-  onVideoEnd: () => void;
 }
 
 const VideoPlayer: React.FC<VideoPlayerProps> = ({ currentVideo }) => {

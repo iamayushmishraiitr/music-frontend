@@ -5,6 +5,7 @@ export const apis = {
   SIGN_IN: `${baseUrl}/signin`,
   POST_STREAM : `${baseUrl}/stream/postStreams`,
   GET_STREAM:`${baseUrl}/stream/getStreams`,
+  GET_HOST:`${baseUrl}/getHost`,
   GET_CURRENT_STREAM:`${baseUrl}/stream/getCurrentStream`,
   PlAY_NEXT :`${baseUrl}/stream/playNext`,
   UP_VOTE:`${baseUrl}/stream/upVote`,

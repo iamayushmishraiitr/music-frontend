@@ -1,52 +1,66 @@
-
-import { Heart } from "lucide-react"
-import { apis } from "../Api/api";
-import { request } from "../Api/reqHandler";
-import { useState } from "react";
+import { Heart } from "lucide-react";
 import { FilledHeart } from "./FilledHeart";
 
-interface  upVotes {
-    id : number ,
-    userId : number ,
-    streamId : number
- }
+interface upVotes {
+  id: number;
+  userId: number;
+  streamId: number;
+}
 
-const StreamStats = ({videoId , upVotes} : {videoId:number,  upVotes : upVotes[]} ) => {
-   
-  const find : Boolean=  upVotes && upVotes?.length>0 ? upVotes.some((item) => item.userId === Number(localStorage.getItem("userId"))) : false;
-  const [likes,setLikes] = useState<Boolean>(find) 
-  const [likesCount,setLikesCount] = useState<number>(upVotes.length)
-  const upVote = async(itemId: number) => {
-    try{
-       await request.post(apis.UP_VOTE ,{
-        userId : Number(localStorage.getItem("userId")) ,
-        streamId : Number(itemId)
-     })
-     setLikes((prev)=>!prev) ;
-     setLikesCount((prev)=> prev+1)
-    }catch(e){
-      console.log(e) 
-    }
+const StreamStats = ({
+  videoId,
+  upVotes,
+  spaceId,
+  socket,
+}: {
+  videoId: number;
+  upVotes: upVotes[];
+  spaceId: string | undefined;
+  socket: WebSocket | null;
+}) => {
+  const userId = Number(localStorage.getItem("userId"));
+
+  const hasLiked = upVotes?.some((item) => item.userId === userId);
+  const likesCount = upVotes?.length || 0;
+
+  const upVote = () => {
+    socket?.send(
+      JSON.stringify({
+        type: "upVote",
+        data: {
+          userId,
+          streamId: videoId,
+          spaceId,
+        },
+      })
+    );
   };
-  const downVote = async(itemId: number) => {
-    try{
-       await request.post(apis.DOWN_VOTES ,{
-        userId : Number(localStorage.getItem("userId")) ,
-        streamId : Number(itemId)
-     })
-     setLikes((prev)=>!prev) ;
-     setLikesCount((prev)=> prev-1)
-    }catch(e){
-      console.log(e) 
-    }
+
+  const downVote = () => {
+    socket?.send(
+      JSON.stringify({
+        type: "downVote",
+        data: {
+          userId,
+          streamId: videoId,
+          spaceId,
+        },
+      })
+    );
   };
 
   return (
-    <div className="video-stats" onClick={()=>{likes ? downVote(videoId) :upVote(videoId)}} style={{ cursor: 'pointer' }}>
-    { likes ? <FilledHeart/> : <Heart color=" #667eea"/>} 
-    <h2 style={{color: "#667eea"}}>{likesCount}</h2>
-   </div>
-  )
-}
+    <div
+      className="video-stats"
+      onClick={() => {
+        hasLiked ? downVote() : upVote();
+      }}
+      style={{ cursor: "pointer" }}
+    >
+      {hasLiked ? <FilledHeart /> : <Heart color="#667eea" />}
+      <h2 style={{ color: "#667eea" }}>{likesCount}</h2>
+    </div>
+  );
+};
 
-export default StreamStats
+export default StreamStats;
