@@ -118,9 +118,8 @@ const Space: React.FC = () => {
         console.error("Invalid WebSocket message:", err);
       }
     };
-
-    socket.addEventListener("message", handleMessage);
-
+    socket.onmessage= handleMessage ;
+    
     if (socket.readyState === WebSocket.OPEN) {
       joinRoom();
     } else {
@@ -129,8 +128,6 @@ const Space: React.FC = () => {
 
     return () => {
       console.log("Socket cleanup");
-      socket.removeEventListener("open", joinRoom);
-      socket.removeEventListener("message", handleMessage);
       dispatch(setSocket(null));
     };
   }, [socket, id, hostId, dispatch]);
