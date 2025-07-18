@@ -1,6 +1,6 @@
 .auth-container {
-    min-height: 99vh;
-    min-width: 99vw;
+    min-height: 97vh;
+    min-width: 98vw;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -18,8 +18,8 @@
     border-radius: 20px;
     padding: 2.5rem;
     width: 40%;
-    min-width: 290px;
-    max-width: 350px;
+    min-width: 10%;
+    max-width: 22%;
     box-shadow: 0 25px 45px rgba(0, 0, 0, 0.2);
   }
   
@@ -168,6 +168,7 @@
     }
     
     .auth-card {
+      min-width: 70%;
       padding: 2rem;
     }
     
