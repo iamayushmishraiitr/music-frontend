@@ -1,12 +1,14 @@
 .auth-container {
-    min-height: 100vh;
-    min-width: 100vw;
+    min-height: 99vh;
+    min-width: 99vw;
     display: flex;
     align-items: center;
     justify-content: center;
     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
     padding: 2rem;
     padding-top: 20px;
+    overflow-x: hidden;
+    overflow-y: hidden;
   }
 
   .auth-card {
@@ -15,9 +17,9 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 20px;
     padding: 2.5rem;
-    width: 100%;
-    max-width: 400px;
-    max-height: 70% ;
+    width: 40%;
+    min-width: 290px;
+    max-width: 350px;
     box-shadow: 0 25px 45px rgba(0, 0, 0, 0.2);
   }
   
@@ -138,7 +140,7 @@
   
   .auth-footer {
     text-align: center;
-    margin-top: 2rem;
+    margin-top: 1rem;
     padding-top: 2rem;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
   }
