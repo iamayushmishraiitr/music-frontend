@@ -18,6 +18,7 @@ interface upVotes {
   streamId: number;
 }
 
+
 interface QueueItem {
   id: number;
   active: boolean;
@@ -41,33 +42,28 @@ const Space: React.FC = () => {
   const socket = useWebSocketConnection();
 
   useEffect(() => {
-    const fetchStreams = async () => {
+    const fetchData = async () => {
       try {
-        console.log("Fetching queue...");
-        const res: any = await request.get(apis.GET_STREAM, {
-          params: { spaceId: id },
-        });
-        setQueue(res?.data?.data || []);
+        const [streamsRes, hostRes] :[any,any] = await Promise.all([
+          request.get(apis.GET_STREAM, {
+            params: { spaceId: id },
+          }),
+          request.get(apis.GET_HOST, {
+            params: { spaceId: id },
+          }),
+        ]);
+  
+        setQueue(streamsRes?.data?.data );
+        setHostId(hostRes?.data?.hostId );
       } catch (error) {
-        console.error("Error fetching streams:", error);
+        console.error("Error fetching data:", error);
       }
     };
-    fetchStreams();
+  
+    fetchData();
   }, [id, reFetchQueue]);
-
-  useEffect(() => {
-    const fetchHostId= async () => {
-      try {
-        const res: any = await request.get(apis.GET_HOST, {
-          params: { spaceId: id },
-        });
-        setHostId(res?.data?.hostId || "");
-      } catch (error) {
-        console.error("Error fetching streams:", error);
-      }
-    };
-    fetchHostId();
-  }, [id]);
+  
+  
 
   useEffect(() => {
     const fetchCurrentStreams = async () => {
@@ -181,7 +177,7 @@ const Space: React.FC = () => {
   const handleGoBack = () => {
     navigate("/dashboard");
   };
-console.log( "aasdadasdsadas -     - >  "  , hostId)
+
   return (
     <div className="space-container">
       <div className="space-header">
