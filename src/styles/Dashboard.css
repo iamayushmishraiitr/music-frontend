@@ -9,6 +9,7 @@
     backdrop-filter: blur(10px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     padding: 1.5rem 2rem;
+    width: 100%;
     position: sticky;
     top: 0;
     z-index: 100;
@@ -269,32 +270,4 @@
     font-size: 0.9rem;
   }
   
-  @media (max-width: 768px) {
-    .dashboard-header {
-      padding: 1rem;
-    }
-    
-    .header-content {
-      flex-direction: column;
-      gap: 1rem;
-      align-items: flex-start;
-    }
-    
-    .dashboard-main {
-      padding: 1rem;
-    }
-    
-    .section-header {
-      flex-direction: column;
-      gap: 1rem;
-      align-items: flex-start;
-    }
-    
-    .spaces-grid {
-      grid-template-columns: 1fr;
-    }
-    
-    .form-actions {
-      flex-direction: column;
-    }
-  }
+  
