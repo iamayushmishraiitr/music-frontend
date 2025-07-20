@@ -36,7 +36,8 @@ const Dashboard = () => {
      dispatch(setToken(null)) ;``
      navigate("/")
   }
-  const handleCreateSpace= async()=>{
+  const handleCreateSpace= async(e: React.FormEvent)=>{
+    e.preventDefault();
     try {
           await request.post(apis.CREATE_SPACES,{
            userId :Number(localStorage.getItem("userId")),
@@ -45,6 +46,7 @@ const Dashboard = () => {
       })
       toast.success("Created a new  Space ")
       setRefreshSpaces(prev => !prev);
+      setShowCreateForm(false)
     } catch (error) {
       toast.success("Error While Creating the Space") 
     }
@@ -61,13 +63,13 @@ const Dashboard = () => {
         setSpaces(res?.data?.data);
       } catch (error) {
         console.error("Error fetching spaces:", error);
-        // Optional: show toast or set error state
+     
       }
     };
   
     fetchSpaces();
   }, [refreshSpaces]);
-  
+
   return(
   <div className="dashboard-container">
     <div className="header-content">
@@ -75,7 +77,7 @@ const Dashboard = () => {
       <div className="header-actions">
         <span className="user-welcome">Welcome, {localStorage.getItem('username')}</span>
         <button onClick={handleSignOut} className="sign-out-btn">
-          <LogOut size={20} />
+          <LogOut size={21} />
           Sign Out
         </button>
       </div>
@@ -89,7 +91,7 @@ const Dashboard = () => {
             className="create-space-btn"
             onClick={() => setShowCreateForm(true)}
           >
-            <Plus size={20} />
+            <Plus size={18} />
             Create New Space
           </button>
         </div>
