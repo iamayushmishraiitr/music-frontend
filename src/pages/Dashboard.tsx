@@ -70,7 +70,6 @@ const Dashboard = () => {
   
   return(
   <div className="dashboard-container">
-  <header className="dashboard-header">
     <div className="header-content">
       <h1>Dashboard</h1>
       <div className="header-actions">
@@ -80,8 +79,7 @@ const Dashboard = () => {
           Sign Out
         </button>
       </div>
-    </div>
-  </header>
+  </div>
   <main className="dashboard-main">
     <div className="dashboard-content">
       <div className="spaces-section">
