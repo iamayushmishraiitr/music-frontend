@@ -2,7 +2,7 @@
    height: 100vh;
    width: 100vw;
    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-   overflow: hidden;
+   overflow: auto;
   }
   
   .header-content {
@@ -58,6 +58,8 @@
   .dashboard-content {
     max-width: 1200px;
     margin: 0 auto;
+    display: block;
+
   }
   
   .spaces-section {
@@ -80,7 +82,7 @@
   .create-space-btn {
     background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
     color: white;
-    padding: 0.75rem 1.5rem;
+    padding: 0.75rem ;
     border-radius: 10px;
     display: flex;
     align-items: center;
@@ -100,8 +102,11 @@
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 15px;
-    padding: 2rem;
     margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+    max-width: 500px
   }
   
   .create-space-form .form-group {
@@ -117,7 +122,6 @@
   
   .create-space-form input,
   .create-space-form textarea {
-    width: 100%;
     padding: 0.75rem 1rem;
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
@@ -141,7 +145,7 @@
   .form-actions {
     display: flex;
     gap: 1rem;
-    justify-content: flex-end;
+    
   }
   
   .create-btn {
@@ -172,6 +176,7 @@
   }
   
   .spaces-grid {
+    overflow-y: auto;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     gap: 1.5rem;
@@ -263,11 +268,11 @@
     color: #a0a0a0;
     font-size: 0.9rem;
   }
-  @media (max-width: 450px) {
+  @media (max-width: 500px) {
     .header-content {
       padding-bottom: 10px;
       font-size: 0.9rem;
-      gap: 10px; /* moved here */
+      gap: 15px;
     }
   
     .header-actions {
