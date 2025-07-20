@@ -283,10 +283,6 @@
   
 
 
-  .queue-section {
-    overflow: hidden; /* disables both scrollbars and scrolling */
-  }
-  
   .queue-section::-webkit-scrollbar {
     width: 0px;
   }
@@ -513,7 +509,7 @@
 
 
 
-  @media (max-width: 768px) {
+  @media (max-width: 1000px) {
     .space-header {
       padding: 1rem;
     }
@@ -532,8 +528,9 @@
     }
     
     .queue-section {
-      max-height: 400px;
+     height: 400px;
       order: -1;
+      position: relative;
     }
     
     .add-video-form {
@@ -543,17 +540,13 @@
     .add-to-queue-btn {
       width: 100%;
     }
-    
-    .queue-item {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 1rem;
+    .queue-list {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
     }
     
-    .queue-item-actions {
-      width: 100%;
-      justify-content: space-between;
-    }
+
     .video-thumbnail {
       justify-self: center;
       width: 150px;
