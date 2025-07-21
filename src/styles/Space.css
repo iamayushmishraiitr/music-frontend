@@ -528,8 +528,8 @@
     }
     
     .queue-section {
-     height: 400px;
-      order: -1;
+      height: 400px;
+      order: 0;
       position: relative;
     }
     
@@ -539,6 +539,7 @@
     
     .add-to-queue-btn {
       width: 100%;
+
     }
     .queue-list {
       position: absolute;
