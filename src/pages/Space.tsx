@@ -149,6 +149,7 @@ const Space: React.FC = () => {
           },
         })
       );
+
       toast.success("Stream added to queue");
     } catch (error) {
       toast.error("Something went wrong");

@@ -6,7 +6,7 @@ interface VideoInputProps {
   youtubeUrl: string | undefined;
   extractedId: string | null;
   setExtractedId: (url: string | null) => void;
-  setYoutubeUrl: (url: string | undefined) => void;
+  setYoutubeUrl: (url: string |undefined ) => void;
   handleAddToQueue: (previewVideo: string | null) => void;
 }
 
@@ -36,10 +36,10 @@ const VideoInput: React.FC<VideoInputProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     handleAddToQueue(extractedId);
-    setTimeout(() => setExtractedId(null), 1000);
+    setTimeout(() =>  (setExtractedId(null), setYoutubeUrl("")), 1000);
   };
 
-  // 🔥 Scroll to preview when new video id comes in
+
   useEffect(() => {
     if (extractedId && previewRef.current) {
       previewRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
